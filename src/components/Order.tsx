@@ -1,5 +1,5 @@
 import React, { FC, useState } from "react";
-import { currencyFormatter, IOrder, IOrderItem } from "../App";
+import { IOrder, IOrderItem } from "../typings";
 import {
   FaCheck,
   FaTimes,
@@ -17,6 +17,7 @@ import { BiMoney } from "react-icons/bi";
 import { GrNotes } from "react-icons/gr";
 
 import { BsPersonFill } from "react-icons/bs";
+import { currencyFormatter } from "../utils";
 
 interface OrderProps {
   order: IOrder;
@@ -79,7 +80,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
 
       {showDetails && (
         <>
-          <div className="border-1 mt-2 border bg-gray-200 p-2 ">
+          <div className="border-1 mt-2 border bg-gray-200 p-3">
             {order.items.map((item, idx) => {
               return (
                 <div key={idx}>

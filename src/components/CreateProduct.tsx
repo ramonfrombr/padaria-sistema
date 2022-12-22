@@ -1,17 +1,23 @@
-import React, { FC, useState } from "react";
-
+import React, { FC, useRef, useState } from "react";
+import { Dispatch } from "redux";
 import { v4 as uuidv4 } from "uuid";
-import { IProduct } from "../App";
+import { createProduct } from "../state/action-creators";
+import { ProductAction } from "../state/actions";
+import { IProduct } from "../typings";
+import { MutableRefObject } from "react";
 
 interface CreateProductProps {
-  setProducts: React.Dispatch<React.SetStateAction<IProduct[]>>;
+  createProduct: (
+    product: IProduct
+  ) => (dispatch: Dispatch<ProductAction>) => void;
 }
 
 const CreateProduct: FC<CreateProductProps> = ({
-  setProducts,
+  createProduct,
 }: CreateProductProps) => {
   const [newProductName, setNewProductName] = useState<string>("");
   const [newProductPrice, setNewProductPrice] = useState<number>(0);
+  const priceInput = useRef<HTMLInputElement>(null);
 
   const handleCreateNewProduct = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,15 +28,19 @@ const CreateProduct: FC<CreateProductProps> = ({
       price: newProductPrice,
     };
 
-    setProducts((currentList) => [...currentList, newProduct]);
+    createProduct(newProduct);
+    setNewProductName("");
+    if (priceInput.current) {
+      priceInput.current.value = "";
+    }
   };
 
   return (
-    <div className="bg-slate-50 p-3 border-2 mx-1 my-2">
+    <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
       <h1>Create Product</h1>
 
       <form onSubmit={handleCreateNewProduct} className="bg-white p-2">
-        <div className="flex flex-col border bg-gray-50 p-1 mb-1">
+        <div className="mb-1 flex flex-col border bg-gray-50 p-1">
           <label htmlFor="newProductName">Product Name</label>
           <input
             value={newProductName}
@@ -42,10 +52,11 @@ const CreateProduct: FC<CreateProductProps> = ({
           />
         </div>
 
-        <div className="flex flex-col border bg-gray-50 p-1 mb-2">
+        <div className="mb-2 flex flex-col border bg-gray-50 p-1">
           <label htmlFor="newProductPrice">Product Price</label>
           <input
             onChange={(e) => setNewProductPrice(Number(e.target.value))}
+            ref={priceInput}
             type="number"
             step="0.01"
             name="newProductPrice"
@@ -53,7 +64,7 @@ const CreateProduct: FC<CreateProductProps> = ({
           />
         </div>
 
-        <button className="p-2 bg-blue-400 rounded text-white font-bold border-blue-800 border">
+        <button className="rounded border border-blue-800 bg-blue-400 p-2 font-bold text-white">
           Create Product
         </button>
       </form>

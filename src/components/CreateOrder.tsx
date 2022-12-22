@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import {
   FaCheck,
   FaTimes,
@@ -8,25 +8,29 @@ import {
   FaChevronDown,
   FaChevronUp,
 } from "react-icons/fa";
-import { currencyFormatter, IOrder, IOrderItem, IProduct } from "../App";
+import { Dispatch } from "redux";
+import { IOrder, IOrderItem, IProduct } from "../typings";
 import { v4 as uuidv4 } from "uuid";
 import { TbTruckDelivery } from "react-icons/tb";
+import { currencyFormatter } from "../utils";
+import { OrderAction } from "../state/actions";
+import { createOrder } from "../state/action-creators";
 
 interface CreateOrderProps {
   products: IProduct[];
-  setOrders: React.Dispatch<React.SetStateAction<IOrder[]>>;
+  createOrder: (order: IOrder) => (dispatch: Dispatch<OrderAction>) => void;
 }
 
 const CreateOrder: FC<CreateOrderProps> = ({
   products,
-  setOrders,
+  createOrder,
 }: CreateOrderProps) => {
   const [currentOrderItems, setCurrentOrderItems] = useState<IOrderItem[]>([]);
   const [currentOrderForDelivery, setCurrentOrderForDelivery] =
     useState<boolean>(false);
 
   const [currentSelectedProductId, setCurrentSelectedProductId] =
-    useState<string>(products[0].id);
+    useState<string>(products[0]?.id);
   const [numberCurrentSelectedProduct, setNumberCurrentSelectedProduct] =
     useState<number>(1);
 
@@ -37,27 +41,35 @@ const CreateOrder: FC<CreateOrderProps> = ({
   const handleAddProductToOrder = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const productName = products.filter(
-      (product) => product.id === currentSelectedProductId
-    )[0].name;
-    const productPrice = products.filter(
-      (product) => product.id === currentSelectedProductId
-    )[0].price;
+    if (products.length) {
+      const productName = products.filter(
+        (product) => product.id === currentSelectedProductId
+      )[0].name;
+      const productPrice = products.filter(
+        (product) => product.id === currentSelectedProductId
+      )[0].price;
 
-    const newItem: IOrderItem = {
-      item: {
-        id: currentSelectedProductId,
-        name: productName,
-        price: productPrice,
-      },
-      quantity: numberCurrentSelectedProduct,
-    };
+      const newItem: IOrderItem = {
+        item: {
+          id: currentSelectedProductId,
+          name: productName,
+          price: productPrice,
+        },
+        quantity: numberCurrentSelectedProduct,
+      };
 
-    setCurrentOrderItems((currentItems) => [...currentItems, newItem]);
+      setCurrentOrderItems((currentItems) => [...currentItems, newItem]);
+    } else {
+      window.alert("No product selected.");
+    }
 
     // Reset order item form
-    setNumberCurrentSelectedProduct((value) => 1);
+    setNumberCurrentSelectedProduct(1);
   };
+
+  useEffect(() => {
+    console.log(currentOrderItems);
+  }, [currentOrderItems]);
 
   const handleCreateNewOrder = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -79,7 +91,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
       comment: currentOrderComment,
     };
 
-    setOrders((currentOrders) => [...currentOrders, newOrder]);
+    createOrder(newOrder);
 
     setCurrentOrderForDelivery(false);
     setCurrentOrderComment("");
@@ -96,7 +108,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
       >
         <div className="flex w-full justify-between">
           <select
-            defaultValue={products[0].id}
+            defaultValue={products[0]?.id}
             onChange={(e) => setCurrentSelectedProductId(e.target.value)}
             className="mr-1 flex-1 rounded"
           >
