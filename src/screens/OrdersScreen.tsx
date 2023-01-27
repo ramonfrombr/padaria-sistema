@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import CreateOrder from "../components/CreateOrder";
 import Order from "../components/Order";
 import { collection, getDocs, onSnapshot, query, orderBy } from "firebase/firestore";
@@ -9,7 +9,7 @@ const OrdersScreen = () => {
   const [orders, setOrders] = useState<IOrderFirebase[]>([])
   const [products, setProducts] = useState<IProduct[]>([])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     function onResult(querySnapshot: any) {
       const orders: IOrderFirebase[] = []
       querySnapshot.forEach(function(doc: any) {
@@ -30,11 +30,6 @@ const OrdersScreen = () => {
     //const unsubscribe = onSnapshot(collection(db, "orders"), onResult, onError);
     return unsubscribe;
   }, []);
-
-
-  useEffect(() => {
-    console.log("orders >>> ", orders)
-  }, [orders])
 
   useEffect(() => {
     function onResult(querySnapshot: any) {

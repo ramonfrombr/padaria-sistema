@@ -41,17 +41,15 @@ interface IDeliveryWithID {
 
 interface IDelivery {
   coordinates: {
-    latitude: number,
-    longitude: number,
+    latitude: number;
+    longitude: number;
   },
-  address: string,
-  clientName: string,
-  clientPhone: string,
-  orderItems: [
-    {name: string, quantity: number},
-    {name: string, quantity: number},
-  ],
-  alreadyPaid: boolean,
-  alreadyDelivered: boolean,
+  address: string;
+  clientName: string;
+  clientPhone: string;
+  orderItems: IOrderItem[];
+  alreadyPaid: boolean;
+  alreadyDelivered: boolean;
   deliveryDate: FieldValue;
+  orderId: string
 }

@@ -33,14 +33,14 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
           <div className="mr-2 flex flex-wrap items-center border bg-gray-50 p-1">
             <FaClock className="mr-2" />
             <span className="mr-2">
-              {/*order.date.toLocaleTimeString([], {
+              {new Date(order?.date?.toDate()).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
-              })*/}
+              })}
             </span>
 
             <FaCalendar className="mr-2" />
-            {/*order.date.toLocaleDateString("pt-BR")*/}
+            {new Date(order?.date?.toDate()).toLocaleDateString("pt-BR")}
           </div>
 
           {/* ITEM QUANTITY */}
