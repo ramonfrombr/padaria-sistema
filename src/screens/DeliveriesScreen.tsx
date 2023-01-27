@@ -1,7 +1,7 @@
 // Libraries
 
 import React, { useEffect, useState } from "react";
-import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import Delivery from "../components/Delivery";
 
@@ -26,14 +26,17 @@ const DeliveriesScreen = () => {
       console.log(error);
     }
 
-    const unsubscribe = onSnapshot(collection(db, "deliveries"), onResult, onError)
+    const q = query(collection(db, "deliveries"), orderBy("deliveryDate", "desc"));
+  
+    const unsubscribe = onSnapshot(q, onResult, onError);
 
     return unsubscribe;
   }, [])
   
   return (
-    <div>
+    <div className="sm:w-3/4 mx-auto pt-12 px-8">
       <h1>Deliveries</h1>
+
       {deliveries.length ? deliveries.map(delivery => <Delivery key={delivery.id} delivery={delivery.data} />) : (<p className="col-span-3">There are no deliveries.</p>)}
     </div>
   );

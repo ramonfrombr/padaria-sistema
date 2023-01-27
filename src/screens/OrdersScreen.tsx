@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import CreateOrder from "../components/CreateOrder";
 import Order from "../components/Order";
-import { collection, getDocs, onSnapshot, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 
 const OrdersScreen = () => {
