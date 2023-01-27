@@ -57,9 +57,9 @@ const OrdersScreen = () => {
       <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
         <h1>List of Orders</h1>
 
-        {orders.map((order) => {
+        {orders.length ? orders.map((order) => {
           return <Order key={order.id} order={order.data} />;
-        })}
+        }) : (<p className="col-span-3">There are no orders.</p>)}
       </div>
     </div>
   );

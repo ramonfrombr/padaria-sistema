@@ -30,17 +30,11 @@ const DeliveriesScreen = () => {
 
     return unsubscribe;
   }, [])
-
-  useEffect(() => {
-    console.log(deliveries)
-  }, [deliveries])
-  
   
   return (
     <div>
       <h1>Deliveries</h1>
-
-      {deliveries.map(delivery => <Delivery key={delivery.id} delivery={delivery.data} />)}
+      {deliveries.length ? deliveries.map(delivery => <Delivery key={delivery.id} delivery={delivery.data} />) : (<p className="col-span-3">There are no deliveries.</p>)}
     </div>
   );
 };
