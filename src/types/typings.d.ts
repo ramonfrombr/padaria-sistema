@@ -51,5 +51,6 @@ interface IDelivery {
   alreadyPaid: boolean;
   alreadyDelivered: boolean;
   deliveryDate: FieldValue;
-  orderId: string
+  orderId: string;
+  details: string;
 }

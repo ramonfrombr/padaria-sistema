@@ -122,7 +122,8 @@ const CreateOrder: FC<CreateOrderProps> = ({
           alreadyPaid: false,
           alreadyDelivered: false,
           deliveryDate: serverTimestamp(),
-          orderId: docRef.id
+          orderId: docRef.id,
+          details: comment
         }
   
         // Add a new document with a generated id.
