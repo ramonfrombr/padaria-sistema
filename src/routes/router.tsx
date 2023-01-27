@@ -1,4 +1,5 @@
 import { createBrowserRouter } from "react-router-dom";
+import DeliveriesScreen from "../screens/DeliveriesScreen";
 import ErrorScreen from "../screens/ErrorScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import ProductsScreen from "../screens/ProductsScreen";
@@ -18,6 +19,10 @@ export const router = createBrowserRouter([
       {
         path: "orders",
         element: <OrdersScreen />,
+      },
+      {
+        path: "deliveries",
+        element: <DeliveriesScreen />,
       },
     ],
   },

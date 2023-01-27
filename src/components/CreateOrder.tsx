@@ -3,58 +3,56 @@ import {
   FaCheck,
   FaTimes,
   FaPlus,
-  FaClock,
-  FaCalendar,
-  FaChevronDown,
-  FaChevronUp,
 } from "react-icons/fa";
-import { Dispatch } from "redux";
-import { IOrder, IOrderItem, IProduct } from "../typings";
-import { v4 as uuidv4 } from "uuid";
 import { TbTruckDelivery } from "react-icons/tb";
 import { currencyFormatter } from "../utils";
-import { OrderAction } from "../state/actions";
-import { createOrder } from "../state/action-creators";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
+import { db } from "../firebase";
 
 interface CreateOrderProps {
   products: IProduct[];
-  createOrder: (order: IOrder) => (dispatch: Dispatch<OrderAction>) => void;
 }
 
 const CreateOrder: FC<CreateOrderProps> = ({
   products,
-  createOrder,
 }: CreateOrderProps) => {
+
   const [currentOrderItems, setCurrentOrderItems] = useState<IOrderItem[]>([]);
   const [currentOrderForDelivery, setCurrentOrderForDelivery] =
     useState<boolean>(false);
 
   const [currentSelectedProductId, setCurrentSelectedProductId] =
-    useState<string>(products[0]?.id);
+    useState<string>("0");
   const [numberCurrentSelectedProduct, setNumberCurrentSelectedProduct] =
     useState<number>(1);
 
   const [currentOrderComment, setCurrentOrderComment] = useState<string>("");
   const [currentOrderClientName, setCurrentOrderClientName] =
-    useState<string>("anonymous client");
+    useState<string>("");
+  const [currentOrderClientPhone, setCurrentOrderClientPhone] =
+    useState<string>("");
+  const [currentOrderDeliveryAddress, setCurrentOrderDeliveryAddress] =
+    useState<string>("");
+
 
   const handleAddProductToOrder = (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
 
     if (products.length) {
+
       const productName = products.filter(
         (product) => product.id === currentSelectedProductId
-      )[0].name;
+      )[0].data.name;
+
       const productPrice = products.filter(
         (product) => product.id === currentSelectedProductId
-      )[0].price;
+      )[0].data.price;
 
       const newItem: IOrderItem = {
-        item: {
-          id: currentSelectedProductId,
-          name: productName,
-          price: productPrice,
-        },
+        productName,
+        productPrice,
+        productImage: "",
         quantity: numberCurrentSelectedProduct,
       };
 
@@ -67,31 +65,40 @@ const CreateOrder: FC<CreateOrderProps> = ({
     setNumberCurrentSelectedProduct(1);
   };
 
-  useEffect(() => {
-    console.log(currentOrderItems);
-  }, [currentOrderItems]);
+  const toggleForDeliveryButton = () => {
+    setCurrentOrderClientName("");
+    setCurrentOrderClientPhone("");
+    setCurrentOrderDeliveryAddress("");
+    setCurrentOrderComment("");
+    setCurrentOrderForDelivery((prev) => !prev)
+  }
 
-  const handleCreateNewOrder = (
+  const handleCreateNewOrder = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     const attendantName = "Ramon";
 
+
     const newOrder: IOrder = {
-      id: uuidv4(),
-      items: currentOrderItems,
-      registerDate: new Date(),
-      attendant: attendantName,
-      client: currentOrderClientName,
-      forDelivery: currentOrderForDelivery,
-      totalValue: currentOrderItems.reduce(
-        (accumulator, currentItem) =>
-          accumulator + currentItem.item.price * currentItem.quantity,
-        0
-      ),
+      attendantName: attendantName,
+      clientName: currentOrderClientName,
       comment: currentOrderComment,
+      date: serverTimestamp(),
+      deliveryId: "",
+      forDelivery: currentOrderForDelivery,
+      items: currentOrderItems,
     };
 
-    createOrder(newOrder);
+    
+    if (!currentOrderForDelivery) {
+      console.log(newOrder);
+      
+      const docRef = await addDoc(collection(db, "orders"), newOrder);
+
+      console.log("Document written with ID: ", docRef.id);
+    } else {
+      alert("Delivery registration not implemented")
+    }
 
     setCurrentOrderForDelivery(false);
     setCurrentOrderComment("");
@@ -112,9 +119,12 @@ const CreateOrder: FC<CreateOrderProps> = ({
             onChange={(e) => setCurrentSelectedProductId(e.target.value)}
             className="mr-1 flex-1 rounded"
           >
+            <option key={"0"} value={"0"}>
+              Choose a product
+            </option>
             {products.map((product, idx) => (
               <option key={product.id} value={product.id}>
-                {product.name}
+                {product.data.name}
               </option>
             ))}
           </select>
@@ -132,7 +142,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
           />
         </div>
 
-        <button className="flex w-10 items-center justify-center rounded bg-green-600 p-1 font-bold text-white">
+        <button type="submit" disabled={currentSelectedProductId === "0" ? true : false} className={`flex w-10 items-center justify-center rounded  p-1 font-bold text-white ${currentSelectedProductId === "0" ? 'bg-gray-500' : 'bg-green-600'}`}>
           <FaPlus />
         </button>
       </form>
@@ -142,11 +152,11 @@ const CreateOrder: FC<CreateOrderProps> = ({
 
         {currentOrderItems.map((orderItem, idx) => (
           <div key={idx} className="mb-1 rounded border bg-white p-1">
-            {orderItem.item.name}{" "}
-            {currencyFormatter.format(orderItem.item.price)} x{" "}
+            {orderItem.productName}{" "}
+            {currencyFormatter.format(orderItem.productPrice)} x{" "}
             {orderItem.quantity} ={" "}
             {currencyFormatter.format(
-              orderItem.item.price * orderItem.quantity
+              orderItem.productPrice * orderItem.quantity
             )}
           </div>
         ))}
@@ -158,7 +168,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
             {currencyFormatter.format(
               currentOrderItems.reduce(
                 (accumulator, currentItem) =>
-                  accumulator + currentItem.item.price * currentItem.quantity,
+                  accumulator + currentItem.productPrice * currentItem.quantity,
                 0
               )
             )}
@@ -166,7 +176,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
         </div>
 
         <button
-          onClick={() => setCurrentOrderForDelivery((prev) => !prev)}
+          onClick={toggleForDeliveryButton}
           className="flex items-center justify-center rounded border-2 bg-white p-2"
         >
           <TbTruckDelivery size={"1.5em"} />
@@ -184,9 +194,8 @@ const CreateOrder: FC<CreateOrderProps> = ({
             <span className="text-lg">Comment</span>
             <textarea
               onChange={(e) => setCurrentOrderComment(e.target.value)}
+              value={currentOrderComment}
               className="w-full border-2 p-1"
-              name=""
-              id=""
               rows={1}
             ></textarea>
 
@@ -195,9 +204,28 @@ const CreateOrder: FC<CreateOrderProps> = ({
               <input
                 className="border-2 p-1"
                 onChange={(e) => setCurrentOrderClientName(e.target.value)}
+                value={currentOrderClientName}
                 type="text"
-                name=""
-                id=""
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-lg">Client's Phone</span>
+              <input
+                className="border-2 p-1"
+                onChange={(e) => setCurrentOrderClientPhone(e.target.value)}
+                value={currentOrderClientPhone}
+                type="text"
+              />
+            </div>
+
+            <div className="flex flex-col">
+              <span className="text-lg">Delivery Address</span>
+              <input
+                className="border-2 p-1"
+                onChange={(e) => setCurrentOrderDeliveryAddress(e.target.value)}
+                value={currentOrderDeliveryAddress}
+                type="text"
               />
             </div>
           </>

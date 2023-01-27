@@ -27,6 +27,14 @@ const Root = () => {
       {/* Tabs */}
       <div className="flex flex-wrap gap-2 bg-slate-600 p-5 [&>a]:mr-1 [&>a]:flex [&>a]:items-center [&>a]:rounded [&>a]:bg-slate-300 [&>a]:p-2 [&_svg]:mr-2">
         <Link
+          to="/products"
+          className={`${location.pathname.includes("products") && "!bg-white"}`}
+        >
+          <FaList />
+          Products
+        </Link>
+
+        <Link
           to="/orders"
           className={`${location.pathname.includes("orders") && "!bg-white"}`}
         >
@@ -41,7 +49,8 @@ const Root = () => {
         >
           <MdDeliveryDining /> Deliveries
         </Link>
-
+        {/**
+        
         <Link
           to="/deliveries"
           className={`${
@@ -51,13 +60,7 @@ const Root = () => {
           <GiCook /> Production
         </Link>
 
-        <Link
-          to="/products"
-          className={`${location.pathname.includes("products") && "!bg-white"}`}
-        >
-          <FaList />
-          Products
-        </Link>
+        
 
         <Link
           to="/preorders"
@@ -94,6 +97,7 @@ const Root = () => {
           <FaMapMarkerAlt />
           Points of Sale
         </Link>
+         */}
       </div>
       {/* Content */}
       <div>

@@ -1,38 +1,33 @@
 import React, { FC, useRef, useState } from "react";
-import { Dispatch } from "redux";
-import { v4 as uuidv4 } from "uuid";
-import { createProduct } from "../state/action-creators";
-import { ProductAction } from "../state/actions";
-import { IProduct } from "../typings";
-import { MutableRefObject } from "react";
+import { addDoc, collection } from "firebase/firestore"; 
+import { db } from "../firebase";
 
-interface CreateProductProps {
-  createProduct: (
-    product: IProduct
-  ) => (dispatch: Dispatch<ProductAction>) => void;
-}
 
-const CreateProduct: FC<CreateProductProps> = ({
-  createProduct,
-}: CreateProductProps) => {
+
+const CreateProduct: FC = () => {
   const [newProductName, setNewProductName] = useState<string>("");
+  const [newProductImage, setNewProductImage] = useState<string>("");
   const [newProductPrice, setNewProductPrice] = useState<number>(0);
   const priceInput = useRef<HTMLInputElement>(null);
 
-  const handleCreateNewProduct = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateNewProduct = async (e: React.FormEvent<HTMLFormElement>) => {
+
     e.preventDefault();
 
-    const newProduct: IProduct = {
-      id: uuidv4(),
+    await addDoc(collection(db, "products"), {
       name: newProductName,
       price: newProductPrice,
-    };
-
-    createProduct(newProduct);
-    setNewProductName("");
-    if (priceInput.current) {
-      priceInput.current.value = "";
-    }
+      image: newProductImage
+    })
+    .then(() => {
+      alert(`Product ${newProductName} created.`)})
+    .catch(error => alert("Error: "+ error))
+    .finally(() => {
+      setNewProductName("");
+      setNewProductPrice(0);
+      priceInput.current!.value = "0";
+      setNewProductImage("");
+    });
   };
 
   return (
@@ -61,6 +56,18 @@ const CreateProduct: FC<CreateProductProps> = ({
             step="0.01"
             name="newProductPrice"
             id="newProductPrice"
+          />
+        </div>
+
+        <div className="mb-1 flex flex-col border bg-gray-50 p-1">
+          <label htmlFor="newProductName">Product Image</label>
+          <input
+            value={newProductImage}
+            onChange={(e) => setNewProductImage(e.target.value)}
+            type="text"
+            name="newProductImage"
+            id="newProductImage"
+            className="rounded p-1"
           />
         </div>
 
