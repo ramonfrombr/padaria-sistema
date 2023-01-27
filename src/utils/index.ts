@@ -1,4 +1,4 @@
-import { IOrder } from "../typings";
+
 
 // Create our number formatter.
 export const currencyFormatter = new Intl.NumberFormat("pt-BR", {
@@ -13,7 +13,7 @@ export const currencyFormatter = new Intl.NumberFormat("pt-BR", {
 export const calculateOrderTotal = (order: IOrder["items"]) => {
   return order.reduce(
     (accumulator, currentItem) =>
-      accumulator + currentItem.item.price * currentItem.quantity,
+      accumulator + currentItem.productPrice * currentItem.quantity,
     0
   );
 };

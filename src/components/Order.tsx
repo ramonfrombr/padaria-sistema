@@ -1,9 +1,5 @@
 import React, { FC, useState } from "react";
-import { IOrder, IOrderItem } from "../typings";
 import {
-  FaCheck,
-  FaTimes,
-  FaPlus,
   FaClock,
   FaCalendar,
   FaChevronDown,
@@ -13,17 +9,17 @@ import {
 
 import { TbTruckDelivery } from "react-icons/tb";
 import { BiMoney } from "react-icons/bi";
-
 import { GrNotes } from "react-icons/gr";
-
 import { BsPersonFill } from "react-icons/bs";
 import { currencyFormatter } from "../utils";
+import { calculateOrderTotal } from "../utils";
 
 interface OrderProps {
   order: IOrder;
 }
 
 const Order: FC<OrderProps> = ({ order }: OrderProps) => {
+
   const [showDetails, setShowDetails] = useState(false);
 
   return (
@@ -37,14 +33,14 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
           <div className="mr-2 flex flex-wrap items-center border bg-gray-50 p-1">
             <FaClock className="mr-2" />
             <span className="mr-2">
-              {order.registerDate.toLocaleTimeString([], {
+              {new Date(order?.date?.toDate()).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
-              })}{" "}
+              })}
             </span>
 
             <FaCalendar className="mr-2" />
-            {order.registerDate.toLocaleDateString("pt-BR")}
+            {new Date(order?.date?.toDate()).toLocaleDateString("pt-BR")}
           </div>
 
           {/* ITEM QUANTITY */}
@@ -60,7 +56,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
             {currencyFormatter.format(
               order.items.reduce(
                 (accumulator: number, currentItem: IOrderItem) =>
-                  accumulator + currentItem.item.price * currentItem.quantity,
+                  accumulator + currentItem.productPrice * currentItem.quantity,
                 0
               )
             )}
@@ -80,21 +76,21 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
 
       {showDetails && (
         <>
-          <div className="border-1 mt-2 border bg-gray-200 p-3">
+          <div className="border-1 mt-2 border bg-gray-50 p-3">
             {order.items.map((item, idx) => {
               return (
                 <div key={idx}>
                   <span className="mr-1">#{idx + 1}</span>
-                  {item.item.name} | {currencyFormatter.format(item.item.price)}{" "}
+                  {item.productName} | {currencyFormatter.format(item.productPrice)}{" "}
                   x {item.quantity} ={" "}
-                  {currencyFormatter.format(item.item.price * item.quantity)}
+                  {currencyFormatter.format(item.productPrice * item.quantity)}
                 </div>
               );
             })}
 
-            <p className="mt-3 flex items-center">
+            <p className="mt-3 flex items-center bg-white border border-green-500">
               <BiMoney className="mr-1" />
-              <b>Total:</b> {currencyFormatter.format(order.totalValue)}
+              <b>Total:</b> {currencyFormatter.format(calculateOrderTotal(order.items))}
             </p>
           </div>
 
@@ -104,7 +100,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
               Additional Information: {order.comment}
             </p>
             <p className="flex items-center">
-              <BsPersonFill className="mr-1" /> Client: {order.client}
+              <BsPersonFill className="mr-1" /> Client: {order.clientName}
             </p>
           </div>
         </>

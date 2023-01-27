@@ -1,28 +1,42 @@
 // Libraries
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { bindActionCreators } from "redux";
+import React, { useEffect, useState } from "react";
 
-// Utilities
-import { actionsCreators, State } from "../state";
+import { collection, getDocs, onSnapshot } from "firebase/firestore";
+import { db } from "../firebase";
+
 // Components
 import CreateProduct from "../components/CreateProduct";
 import ListOfProducts from "../components/ListOfProducts";
 
 const ProductsScreen = () => {
-  const dispatch = useDispatch();
+  
+  const [products, setProducts] = useState<IProduct[]>([])
 
-  const { createProduct, deleteProduct } = bindActionCreators(
-    actionsCreators,
-    dispatch
-  );
+  useEffect(() => {
 
-  const products = useSelector((state: State) => state.products);
+    function onResult(querySnapshot: any) {
+      const products: IProduct[] = []
+
+      querySnapshot.forEach(function(doc: any) {
+        const tempData: IProduct = {id: doc.id, data: doc.data()}
+        products.push(tempData);
+      });
+
+      setProducts(products);
+    }
+
+    function onError(error: any) {
+      console.log(error);
+    }
+  
+    const unsubscribe = onSnapshot(collection(db, "products"), onResult, onError);
+    return unsubscribe;
+  }, []);
 
   return (
     <div>
-      <ListOfProducts products={products} deleteProduct={deleteProduct} />
-      <CreateProduct createProduct={createProduct} />
+      <CreateProduct />
+      <ListOfProducts products={products} />
       <h1>All rights reserved</h1>
     </div>
   );
