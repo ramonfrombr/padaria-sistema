@@ -50,13 +50,14 @@ const OrdersScreen = () => {
   }, []);
 
   return (
-    <div>
-       
-      <CreateOrder products={products} /*createOrder={createOrder}*/ />
+
+    <div className="sm:w-3/4 mx-auto pt-12 px-8">
+      <h1>Orders</h1>
+
+      <CreateOrder products={products} />
 
       <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
         <h1>List of Orders</h1>
-
         {orders.length ? orders.map((order) => {
           return <Order key={order.id} order={order.data} />;
         }) : (<p className="col-span-3">There are no orders.</p>)}

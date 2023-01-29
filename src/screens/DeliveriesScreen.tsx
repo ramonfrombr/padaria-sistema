@@ -1,16 +1,14 @@
 // Libraries
-
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import Delivery from "../components/Delivery";
-
 
 const DeliveriesScreen = () => {
   const [deliveries, setDeliveries] = useState<IDeliveryWithID[]>([])
   
   // Gets deliveries data
-  useEffect(() => {
+  useLayoutEffect(() => {
     const onResult = (querySnapshot: any) => {
       const deliveries: IDeliveryWithID[] = []
 
@@ -31,7 +29,7 @@ const DeliveriesScreen = () => {
     const unsubscribe = onSnapshot(q, onResult, onError);
 
     return unsubscribe;
-  }, [])
+  }, [deliveries])
   
   return (
     <div className="sm:w-3/4 mx-auto pt-12 px-8">

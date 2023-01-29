@@ -34,10 +34,10 @@ const ProductsScreen = () => {
   }, []);
 
   return (
-    <div>
+    <div className="sm:w-3/4 mx-auto pt-12 px-8">
+      <h1>Products</h1>
       <CreateProduct />
       <ListOfProducts products={products} />
-      <h1>All rights reserved</h1>
     </div>
   );
 };

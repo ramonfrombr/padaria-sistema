@@ -1,9 +1,9 @@
-// Libraries
-
+import React from 'react'
 
 const DeliveryMapScreen = () => {
-  
-  return (<div></div>);
-};
+  return (
+    <div>Em construção</div>
+  )
+}
 
-export default DeliveryMapScreen;
+export default DeliveryMapScreen

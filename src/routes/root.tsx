@@ -3,10 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { GrNotes } from "react-icons/gr";
 import {
   FaList,
-  FaMapMarkerAlt,
-  FaStoreAlt,
-  FaBoxOpen,
-  FaCalendar,
+  FaMapMarkedAlt
 } from "react-icons/fa";
 import { MdDeliveryDining } from "react-icons/md";
 import { GiCook } from "react-icons/gi";
@@ -48,6 +45,15 @@ const Root = () => {
           }`}
         >
           <MdDeliveryDining /> Deliveries
+        </Link>
+
+        <Link
+          to="/deliverymap"
+          className={`${
+            location.pathname.includes("deliverymap") && "!bg-white"
+          }`}
+        >
+          <FaMapMarkedAlt /> Delivery Map
         </Link>
         {/**
         

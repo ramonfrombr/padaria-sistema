@@ -23,7 +23,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className="border-1 mb-4 rounded border-gray-100 bg-white p-1 drop-shadow">
+    <div className="cursor-pointer border-1 mb-4 rounded border-gray-100 bg-white p-1 drop-shadow">
       <div
         className="flex items-center justify-between"
         onClick={() => setShowDetails((prev) => !prev)}
@@ -76,7 +76,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
 
       {showDetails && (
         <>
-          <div className="border-1 mt-2 border bg-gray-50 p-3">
+          <div className="border-1 mt-2 p-3">
             {order.items.map((item, idx) => {
               return (
                 <div key={idx}>

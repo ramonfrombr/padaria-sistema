@@ -1,10 +1,15 @@
 import React, { FC, useRef, useState } from "react";
 import { addDoc, collection } from "firebase/firestore"; 
 import { db } from "../firebase";
+import {
+  FaChevronDown,
+  FaChevronUp,
+} from "react-icons/fa";
 
 
 
 const CreateProduct: FC = () => {
+  const [showForm, setShowForm] = useState(false)
   const [newProductName, setNewProductName] = useState<string>("");
   const [newProductImage, setNewProductImage] = useState<string>("");
   const [newProductPrice, setNewProductPrice] = useState<number>(0);
@@ -32,9 +37,16 @@ const CreateProduct: FC = () => {
 
   return (
     <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
-      <h1>Create Product</h1>
 
-      <form onSubmit={handleCreateNewProduct} className="bg-white p-2">
+      <div onClick={() => setShowForm(prev => !prev)} className="cursor-pointer flex items-center justify-between">
+        <h1 className="mb-0">Create Product</h1>
+        <div className="rounded bg-slate-300 p-1 h-fit">
+          {showForm ? <FaChevronUp /> : <FaChevronDown />}
+        </div>
+      </div>
+      
+      {showForm && (
+      <form onSubmit={handleCreateNewProduct} className="bg-white p-2 mt-3">
         <div className="mb-1 flex flex-col border bg-gray-50 p-1">
           <label htmlFor="newProductName">Product Name</label>
           <input
@@ -75,6 +87,7 @@ const CreateProduct: FC = () => {
           Create Product
         </button>
       </form>
+      )}
     </div>
   );
 };
