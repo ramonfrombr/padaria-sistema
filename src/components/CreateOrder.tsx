@@ -157,7 +157,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
     <div className="mx-1 my-2 border-2 bg-gray-100 p-3">
 
       <div onClick={() => setShowForm(prev => !prev)} className="cursor-pointer flex items-center justify-between">
-        <h1 className="mb-0">Create Order</h1>
+        <h1 className="mb-0">Criar Pedido</h1>
         <div className="rounded bg-slate-300 p-1 h-fit">
           {showForm ? <FaChevronUp /> : <FaChevronDown />}
         </div>
@@ -175,7 +175,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
                 className="mr-1 flex-1 rounded"
               >
                 <option key={"0"} value={"0"}>
-                  Choose a product
+                  Escolha um produto
                 </option>
                 {products.map((product, idx) => (
                   <option key={product.id} value={product.id}>
@@ -203,7 +203,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
           </form>
 
           <div className="mt-5 mb-3 border-2 bg-slate-50 p-2">
-            <h2>Order Items</h2>
+            <h2>Itens do Pedido</h2>
 
             {items.map((orderItem, idx) => (
               <div key={idx} className="mb-1 rounded border bg-white p-1">
@@ -235,7 +235,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
               className="flex items-center justify-center rounded border-2 bg-white p-2"
             >
               <TbTruckDelivery size={"1.5em"} />
-              <span className="mx-2">For Delivery</span>
+              <span className="mx-2">Para Entrega</span>
 
               {forDelivery ? (
                 <FaCheck color="green" />
@@ -246,7 +246,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
 
             {forDelivery && (
               <>
-                <span className="text-lg">Comment</span>
+                <span className="text-lg">Detalhes da Entrega</span>
                 <textarea
                   onChange={(e) => setComment(e.target.value)}
                   value={comment}
@@ -255,7 +255,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
                 ></textarea>
 
                 <div className="flex flex-col">
-                  <span className="text-lg">Client's Name</span>
+                  <span className="text-lg">Nome do Cliente</span>
                   <input
                     className="border-2 p-1"
                     onChange={(e) => setClientName(e.target.value)}
@@ -265,7 +265,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
                 </div>
 
                 <div className="flex flex-col">
-                  <span className="text-lg">Client's Phone</span>
+                  <span className="text-lg">Telefone do Cliente</span>
                   <input
                     className="border-2 p-1"
                     onChange={(e) => setClientPhone(e.target.value)}
@@ -275,7 +275,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
                 </div>
 
                 <div className="flex flex-col">
-                  <span className="text-lg">Delivery Address</span>
+                  <span className="text-lg">Endereço de Entrega</span>
                   <input
                     className="border-2 p-1"
                     onChange={(e) => setDeliveryAddress(e.target.value)}
@@ -297,7 +297,7 @@ const CreateOrder: FC<CreateOrderProps> = ({
               !items.length && "bg-slate-400"
             }`}
           >
-            Create Order
+            Criar Pedido
           </button>
         </>
       )}

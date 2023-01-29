@@ -39,7 +39,7 @@ const CreateProduct: FC = () => {
     <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
 
       <div onClick={() => setShowForm(prev => !prev)} className="cursor-pointer flex items-center justify-between">
-        <h1 className="mb-0">Create Product</h1>
+        <h1 className="mb-0">Criar Produto</h1>
         <div className="rounded bg-slate-300 p-1 h-fit">
           {showForm ? <FaChevronUp /> : <FaChevronDown />}
         </div>
@@ -48,7 +48,7 @@ const CreateProduct: FC = () => {
       {showForm && (
       <form onSubmit={handleCreateNewProduct} className="bg-white p-2 mt-3">
         <div className="mb-1 flex flex-col border bg-gray-50 p-1">
-          <label htmlFor="newProductName">Product Name</label>
+          <label htmlFor="newProductName">Nome do Produto</label>
           <input
             value={newProductName}
             onChange={(e) => setNewProductName(e.target.value)}
@@ -60,7 +60,7 @@ const CreateProduct: FC = () => {
         </div>
 
         <div className="mb-2 flex flex-col border bg-gray-50 p-1">
-          <label htmlFor="newProductPrice">Product Price</label>
+          <label htmlFor="newProductPrice">Preço do Produto</label>
           <input
             onChange={(e) => setNewProductPrice(Number(e.target.value))}
             ref={priceInput}
@@ -72,7 +72,7 @@ const CreateProduct: FC = () => {
         </div>
 
         <div className="mb-1 flex flex-col border bg-gray-50 p-1">
-          <label htmlFor="newProductName">Product Image</label>
+          <label htmlFor="newProductName">Imagem do Produto</label>
           <input
             value={newProductImage}
             onChange={(e) => setNewProductImage(e.target.value)}
@@ -84,7 +84,7 @@ const CreateProduct: FC = () => {
         </div>
 
         <button className="rounded border border-blue-800 bg-blue-400 p-2 font-bold text-white">
-          Create Product
+          Criar Produto
         </button>
       </form>
       )}

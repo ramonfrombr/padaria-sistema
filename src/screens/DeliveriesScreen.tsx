@@ -17,6 +17,7 @@ const DeliveriesScreen = () => {
         deliveries.push(tempData);
       })
 
+      console.log("deliveries >>>> ", deliveries)
       setDeliveries(deliveries)
     }
 
@@ -29,13 +30,13 @@ const DeliveriesScreen = () => {
     const unsubscribe = onSnapshot(q, onResult, onError);
 
     return unsubscribe;
-  }, [deliveries])
+  }, [])
   
   return (
     <div className="sm:w-3/4 mx-auto pt-12 px-8">
-      <h1>Deliveries</h1>
+      <h1>Entregas</h1>
 
-      {deliveries.length ? deliveries.map(delivery => <Delivery key={delivery.id} delivery={delivery.data} />) : (<p className="col-span-3">There are no deliveries.</p>)}
+      {deliveries.length ? deliveries.map(delivery => <Delivery key={delivery.id} delivery={delivery.data} />) : (<p className="col-span-3">Não há entregas registradas.</p>)}
     </div>
   );
 };
