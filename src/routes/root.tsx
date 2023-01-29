@@ -1,4 +1,3 @@
-import React from "react";
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { GrNotes } from "react-icons/gr";
 import {
@@ -6,15 +5,7 @@ import {
   FaMapMarkedAlt
 } from "react-icons/fa";
 import { MdDeliveryDining } from "react-icons/md";
-import { GiCook } from "react-icons/gi";
 
-/*
-Create Order
-List all Orders
-Create Product
-List all Products
-List all Deliveries
-*/
 
 const Root = () => {
   let location = useLocation();

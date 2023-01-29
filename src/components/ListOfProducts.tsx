@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect } from "react";
+import React, { FC } from "react";
 import Product from "./Product";
 
 interface ListOfProductsProps {

@@ -1,5 +1,5 @@
 // Libraries
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 import Delivery from "../components/Delivery";
