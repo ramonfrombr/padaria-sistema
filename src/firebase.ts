@@ -3,7 +3,6 @@ import { FirebaseApp, initializeApp } from "firebase/app";
 import { getAuth, connectAuthEmulator, Auth } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator, Firestore } from "firebase/firestore";
 
-
 let app: FirebaseApp;
 let db: Firestore;
 let auth: Auth;

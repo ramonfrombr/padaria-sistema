@@ -3,6 +3,9 @@
 
 name: Deploy to Firebase Hosting on PR
 'on': pull_request
+env:
+  # Setting an environment variable with the value of a configuration variable
+  REACT_APP_DEVELOPMENT_MODE: '0'
 jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
