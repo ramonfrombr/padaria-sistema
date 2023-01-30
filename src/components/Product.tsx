@@ -1,9 +1,7 @@
 import React, { FC, useState } from "react";
 import { FaPen } from "react-icons/fa";
-import { MdDeleteForever } from "react-icons/md";
-import { currencyFormatter } from "../utils";
 import placeholder from '../assets/images/placeholder.png'
-import { doc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../firebase";
 
 interface ProductProps {

@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import DeliveriesScreen from "../screens/DeliveriesScreen";
+import DeliveryMapScreen from "../screens/DeliveryMapScreen";
 import ErrorScreen from "../screens/ErrorScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import ProductsScreen from "../screens/ProductsScreen";
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
       {
         path: "deliveries",
         element: <DeliveriesScreen />,
+      },
+      {
+        path: "deliverymap",
+        element: <DeliveryMapScreen />,
       },
     ],
   },

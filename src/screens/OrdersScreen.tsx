@@ -1,7 +1,7 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import CreateOrder from "../components/CreateOrder";
 import Order from "../components/Order";
-import { collection, getDocs, onSnapshot, query, orderBy } from "firebase/firestore";
+import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 
 const OrdersScreen = () => {
@@ -50,16 +50,17 @@ const OrdersScreen = () => {
   }, []);
 
   return (
-    <div>
-       
-      <CreateOrder products={products} /*createOrder={createOrder}*/ />
 
-      <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
-        <h1>List of Orders</h1>
+    <div className="sm:w-3/4 mx-auto pt-12 px-8">
+      <h1>Pedidos</h1>
 
+      <CreateOrder products={products} />
+
+      <div className="mx-1 my-5 border-2 bg-slate-200 p-3">
+        <h1>Lista de Pedidos</h1>
         {orders.length ? orders.map((order) => {
           return <Order key={order.id} order={order.data} />;
-        }) : (<p className="col-span-3">There are no orders.</p>)}
+        }) : (<p className="col-span-3">Não há pedidos registrados.</p>)}
       </div>
     </div>
   );

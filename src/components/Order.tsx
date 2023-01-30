@@ -23,7 +23,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className="border-1 mb-4 rounded border-gray-100 bg-white p-1 drop-shadow">
+    <div className="cursor-pointer border-1 mb-4 rounded border-gray-100 bg-white p-1 drop-shadow">
       <div
         className="flex items-center justify-between"
         onClick={() => setShowDetails((prev) => !prev)}
@@ -46,7 +46,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
           {/* ITEM QUANTITY */}
           <div className="mr-2 flex items-center border bg-gray-50 p-1">
             <FaShoppingCart className="mr-1" />
-            {order.items.length} items
+            {order.items.length} itens
           </div>
 
           {/* TOTAL */}
@@ -64,7 +64,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
 
           {order.forDelivery && (
             <div className="flex items-center border bg-blue-500 p-1 font-bold text-white">
-              <TbTruckDelivery className="mr-1" /> For Delivery
+              <TbTruckDelivery className="mr-1" /> Para Entrega
             </div>
           )}
         </div>
@@ -76,7 +76,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
 
       {showDetails && (
         <>
-          <div className="border-1 mt-2 border bg-gray-50 p-3">
+          <div className="border-1 mt-2 p-3">
             {order.items.map((item, idx) => {
               return (
                 <div key={idx}>
@@ -97,10 +97,10 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
           <div className="border-1 mt-2 border bg-gray-50 p-2 ">
             <p className="flex items-center">
               <GrNotes className="mr-1" />
-              Additional Information: {order.comment}
+              Detalhes do Pedido: {order.comment}
             </p>
             <p className="flex items-center">
-              <BsPersonFill className="mr-1" /> Client: {order.clientName}
+              <BsPersonFill className="mr-1" /> Cliente: {order.clientName}
             </p>
           </div>
         </>
