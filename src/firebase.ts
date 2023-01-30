@@ -7,6 +7,7 @@ let app: FirebaseApp;
 let db: Firestore;
 let auth: Auth;
 
+/*
 if (Number(process.env.REACT_APP_DEVELOPMENT_MODE)) {
 
   app = initializeApp({
@@ -36,7 +37,7 @@ if (Number(process.env.REACT_APP_DEVELOPMENT_MODE)) {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
-}
+}*/
 
 const firebaseConfig = {
   apiKey: process.env.APP_ENV_FIREBASE_API_KEY,
