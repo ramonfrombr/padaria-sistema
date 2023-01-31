@@ -5,9 +5,9 @@ import {
   FaPlus,
 } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
-import { currencyFormatter } from "../utils";
+import { currencyFormatter } from "../../utils";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
-import { db } from "../firebase";
+import { db } from "../../firebase";
 import axios from 'axios';
 import {
   FaChevronDown,

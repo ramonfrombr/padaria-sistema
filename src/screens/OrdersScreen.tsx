@@ -1,6 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import CreateOrder from "../components/CreateOrder";
-import Order from "../components/Order";
+import CreateOrder from "../components/admin/CreateOrder";
+import Order from "../components/admin/Order";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
 

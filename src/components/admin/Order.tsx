@@ -11,8 +11,8 @@ import { TbTruckDelivery } from "react-icons/tb";
 import { BiMoney } from "react-icons/bi";
 import { GrNotes } from "react-icons/gr";
 import { BsPersonFill } from "react-icons/bs";
-import { currencyFormatter } from "../utils";
-import { calculateOrderTotal } from "../utils";
+import { currencyFormatter } from "../../utils";
+import { calculateOrderTotal } from "../../utils";
 
 interface OrderProps {
   order: IOrder;
