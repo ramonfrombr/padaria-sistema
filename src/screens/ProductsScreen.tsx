@@ -5,8 +5,8 @@ import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 
 // Components
-import CreateProduct from "../components/CreateProduct";
-import ListOfProducts from "../components/ListOfProducts";
+import CreateProduct from "../components/admin/CreateProduct";
+import ListOfProducts from "../components/admin/ListOfProducts";
 
 const ProductsScreen = () => {
   

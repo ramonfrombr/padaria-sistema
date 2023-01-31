@@ -2,7 +2,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { collection, onSnapshot, query, orderBy } from "firebase/firestore";
 import { db } from "../firebase";
-import Delivery from "../components/Delivery";
+import Delivery from "../components/admin/Delivery";
 
 const DeliveriesScreen = () => {
   const [deliveries, setDeliveries] = useState<IDeliveryWithID[]>([])
