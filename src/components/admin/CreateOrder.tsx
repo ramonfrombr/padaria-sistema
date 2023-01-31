@@ -1,52 +1,39 @@
 import React, { FC, useState } from "react";
-import {
-  FaCheck,
-  FaTimes,
-  FaPlus,
-} from "react-icons/fa";
+import { FaCheck, FaTimes, FaPlus } from "react-icons/fa";
 import { TbTruckDelivery } from "react-icons/tb";
 import { currencyFormatter } from "../../utils";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"; 
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
-import axios from 'axios';
-import {
-  FaChevronDown,
-  FaChevronUp,
-} from "react-icons/fa";
+import axios from "axios";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 interface CreateOrderProps {
   products: IProduct[];
 }
 
-const CreateOrder: FC<CreateOrderProps> = ({
-  products,
-}: CreateOrderProps) => {
-  const [showForm, setShowForm] = useState(false)
+const CreateOrder: FC<CreateOrderProps> = ({ products }: CreateOrderProps) => {
+  const navigate = useNavigate();
+  const [showForm, setShowForm] = useState(false);
   const [items, setItems] = useState<IOrderItem[]>([]);
-  const [forDelivery, setForDelivery] =
-    useState<boolean>(false);
+  const [forDelivery, setForDelivery] = useState<boolean>(false);
 
-  const [selectedProductId, setSelectedProductId] =
-    useState<string>("0");
-  const [numberSelectedProduct, setNumberSelectedProduct] =
-    useState<number>(1);
+  const [selectedProductId, setSelectedProductId] = useState<string>("0");
+  const [numberSelectedProduct, setNumberSelectedProduct] = useState<number>(1);
 
   const [comment, setComment] = useState<string>("");
-  const [clientName, setClientName] =
-    useState<string>("");
-  const [clientPhone, setClientPhone] =
-    useState<string>("");
-  const [deliveryAddress, setDeliveryAddress] =
-    useState<string>("");
+  const [clientName, setClientName] = useState<string>("");
+  const [clientPhone, setClientPhone] = useState<string>("");
+  const [deliveryAddress, setDeliveryAddress] = useState<string>("");
+  const [alreadyPaid, setAlreadyPaid] = useState(false);
 
-  const GOOGLE_BASE_URL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+  const GOOGLE_BASE_URL =
+    "https://maps.googleapis.com/maps/api/geocode/json?address=";
 
   const handleAddProductToOrder = (e: React.FormEvent<HTMLFormElement>) => {
-
     e.preventDefault();
 
     if (products.length) {
-
       const productName = products.filter(
         (product) => product.id === selectedProductId
       )[0].data.name;
@@ -76,14 +63,13 @@ const CreateOrder: FC<CreateOrderProps> = ({
     setClientPhone("");
     setDeliveryAddress("");
     setComment("");
-    setForDelivery((prev) => !prev)
-  }
+    setForDelivery((prev) => !prev);
+  };
 
   const handleCreateNewOrder = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     const attendantName = "Ramon";
-
 
     const newOrder: IOrder = {
       attendantName,
@@ -92,59 +78,64 @@ const CreateOrder: FC<CreateOrderProps> = ({
       date: serverTimestamp(),
       deliveryId: "",
       forDelivery,
-      items
+      items,
     };
 
     const docRef = await addDoc(collection(db, "orders"), newOrder);
     console.log("Document written: ", docRef);
-    
-    
-    
-    if (forDelivery) {
 
+    if (forDelivery) {
       //https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=
 
-     
+      const GOOGLE_GEOCODING_API_URL = `${GOOGLE_BASE_URL}${deliveryAddress.replace(
+        / /g,
+        "+"
+      )}+Serra+ES&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`;
 
-      const GOOGLE_GEOCODING_API_URL = `${GOOGLE_BASE_URL}${deliveryAddress.replace(/ /g,"+")}+Serra+ES&key=${process.env.REACT_APP_GOOGLE_MAPS_API}`;
+      console.log(GOOGLE_GEOCODING_API_URL);
 
-      console.log(GOOGLE_GEOCODING_API_URL)
+      let deliveryCoordinates = { lat: 0, lng: 0 };
 
-      let deliveryCoordinates = {lat: 0, lng: 0};
+      axios
+        .get(GOOGLE_GEOCODING_API_URL)
+        .then(async (response) => {
+          // handle success
+          console.log(response.data.results[0]);
+          deliveryCoordinates = response.data.results[0].geometry.location;
 
-      axios.get(GOOGLE_GEOCODING_API_URL).then(async (response) => {
-        // handle success
-        console.log(response.data.results[0]);
-        deliveryCoordinates = response.data.results[0].geometry.location;
-        
-        const newDelivery: IDelivery = {
-          coordinates: {
-            latitude: deliveryCoordinates.lat,
-            longitude: deliveryCoordinates.lng
-          },
-          address: deliveryAddress,
-          clientName,
-          clientPhone,
-          orderItems: items,
-          alreadyPaid: false,
-          alreadyDelivered: false,
-          deliveryDate: serverTimestamp(),
-          orderId: docRef.id,
-          details: comment
-        }
-  
-        // Add a new document with a generated id.
-        const deliveryRef = await addDoc(collection(db, "deliveries"), newDelivery);
-        console.log("Document written with ID: ", deliveryRef.id);
-      })
-      .catch(function (error) {
-        // handle error
-        alert("Couldn't finish the order!")
-        console.log(error);
-      })
-      .then(function () {
-        // always executed
-      });
+          const newDelivery: IDelivery = {
+            coordinates: {
+              latitude: deliveryCoordinates.lat,
+              longitude: deliveryCoordinates.lng,
+            },
+            address: deliveryAddress,
+            clientName,
+            clientPhone,
+            orderItems: items,
+            alreadyPaid,
+            alreadyDelivered: false,
+            deliveryDate: serverTimestamp(),
+            orderId: docRef.id,
+            details: comment,
+          };
+
+          // Add a new document with a generated id.
+          const deliveryRef = await addDoc(
+            collection(db, "deliveries"),
+            newDelivery
+          );
+          console.log("Document written with ID: ", deliveryRef.id);
+
+          navigate("/admin/deliveries");
+        })
+        .catch(function (error) {
+          // handle error
+          alert("Couldn't finish the order!");
+          console.log(error);
+        })
+        .then(function () {
+          // always executed
+        });
     }
 
     setForDelivery(false);
@@ -155,19 +146,21 @@ const CreateOrder: FC<CreateOrderProps> = ({
 
   return (
     <div className="mx-1 my-2 border-2 bg-gray-100 p-3">
-
-      <div onClick={() => setShowForm(prev => !prev)} className="cursor-pointer flex items-center justify-between">
+      <div
+        onClick={() => setShowForm((prev) => !prev)}
+        className="flex cursor-pointer items-center justify-between"
+      >
         <h1 className="mb-0">Criar Pedido</h1>
-        <div className="rounded bg-slate-300 p-1 h-fit">
+        <div className="h-fit rounded bg-slate-300 p-1">
           {showForm ? <FaChevronUp /> : <FaChevronDown />}
         </div>
       </div>
-      
+
       {showForm && (
         <>
           <form
             onSubmit={handleAddProductToOrder}
-            className="flex justify-between bg-white p-3 mt-3"
+            className="mt-3 flex justify-between bg-white p-3"
           >
             <div className="flex w-full justify-between">
               <select
@@ -197,7 +190,13 @@ const CreateOrder: FC<CreateOrderProps> = ({
               />
             </div>
 
-            <button type="submit" disabled={selectedProductId === "0" ? true : false} className={`flex w-10 items-center justify-center rounded  p-1 font-bold text-white ${selectedProductId === "0" ? 'bg-gray-500' : 'bg-green-600'}`}>
+            <button
+              type="submit"
+              disabled={selectedProductId === "0" ? true : false}
+              className={`flex w-10 items-center justify-center rounded  p-1 font-bold text-white ${
+                selectedProductId === "0" ? "bg-gray-500" : "bg-green-600"
+              }`}
+            >
               <FaPlus />
             </button>
           </form>
@@ -223,7 +222,8 @@ const CreateOrder: FC<CreateOrderProps> = ({
                 {currencyFormatter.format(
                   items.reduce(
                     (accumulator, currentItem) =>
-                      accumulator + currentItem.productPrice * currentItem.quantity,
+                      accumulator +
+                      currentItem.productPrice * currentItem.quantity,
                     0
                   )
                 )}
@@ -246,41 +246,70 @@ const CreateOrder: FC<CreateOrderProps> = ({
 
             {forDelivery && (
               <>
-                <span className="text-lg">Detalhes da Entrega</span>
-                <textarea
-                  onChange={(e) => setComment(e.target.value)}
-                  value={comment}
-                  className="w-full border-2 p-1"
-                  rows={1}
-                ></textarea>
+                <div className="flex flex-col">
+                  <label className="mt-2 text-lg" htmlFor="comment">
+                    Detalhes da Entrega
+                  </label>
+                  <textarea
+                    onChange={(e) => setComment(e.target.value)}
+                    value={comment}
+                    className="w-full border-2 p-1"
+                    rows={1}
+                    name="comment"
+                  ></textarea>
+                </div>
 
                 <div className="flex flex-col">
-                  <span className="text-lg">Nome do Cliente</span>
+                  <label className="mt-2 text-lg" htmlFor="clientName">
+                    Nome do Cliente
+                  </label>
                   <input
                     className="border-2 p-1"
                     onChange={(e) => setClientName(e.target.value)}
                     value={clientName}
                     type="text"
+                    name="clientName"
                   />
                 </div>
 
                 <div className="flex flex-col">
-                  <span className="text-lg">Telefone do Cliente</span>
+                  <label className="mt-2 text-lg" htmlFor="clientPhone">
+                    Telefone do Cliente
+                  </label>
                   <input
                     className="border-2 p-1"
                     onChange={(e) => setClientPhone(e.target.value)}
                     value={clientPhone}
                     type="text"
+                    name="clientPhone"
                   />
                 </div>
 
                 <div className="flex flex-col">
-                  <span className="text-lg">Endereço de Entrega</span>
+                  <label className="mt-2 text-lg" htmlFor="deliveryAddress">
+                    Endereço de Entrega
+                  </label>
                   <input
                     className="border-2 p-1"
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     value={deliveryAddress}
                     type="text"
+                    name="deliveryAddress"
+                  />
+                </div>
+
+                <div className="flex flex-col">
+                  <label className="mt-2 text-lg" htmlFor="alreadyPaid">
+                    Pedido já pago
+                  </label>
+                  <input
+                    onChange={() => {
+                      setAlreadyPaid((prev) => !prev);
+                    }}
+                    type="checkbox"
+                    name="alreadyPaid"
+                    id="alreadyPaid"
+                    className="m-2 scale-[2] self-start"
                   />
                 </div>
               </>

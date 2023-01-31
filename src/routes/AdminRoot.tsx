@@ -1,6 +1,6 @@
 import { Link, Outlet, useLocation } from "react-router-dom";
 import { GrNotes } from "react-icons/gr";
-import { FaList, FaMapMarkedAlt } from "react-icons/fa";
+import { FaList } from "react-icons/fa";
 import { MdDeliveryDining } from "react-icons/md";
 import logo from "../assets/images/padaria-logo.png";
 
