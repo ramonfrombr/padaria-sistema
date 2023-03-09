@@ -7,18 +7,17 @@ import { db } from "../firebase";
 // Components
 import CreateProduct from "../components/admin/CreateProduct";
 import ListOfProducts from "../components/admin/ListOfProducts";
+import { Heading } from "@aprendaagora/simple-react-component-library";
 
 const ProductsScreen = () => {
-  
-  const [products, setProducts] = useState<IProduct[]>([])
+  const [products, setProducts] = useState<IProduct[]>([]);
 
   useEffect(() => {
-
     function onResult(querySnapshot: any) {
-      const products: IProduct[] = []
+      const products: IProduct[] = [];
 
-      querySnapshot.forEach(function(doc: any) {
-        const tempData: IProduct = {id: doc.id, data: doc.data()}
+      querySnapshot.forEach(function (doc: any) {
+        const tempData: IProduct = { id: doc.id, data: doc.data() };
         products.push(tempData);
       });
 
@@ -28,14 +27,18 @@ const ProductsScreen = () => {
     function onError(error: any) {
       console.log(error);
     }
-  
-    const unsubscribe = onSnapshot(collection(db, "products"), onResult, onError);
+
+    const unsubscribe = onSnapshot(
+      collection(db, "products"),
+      onResult,
+      onError
+    );
     return unsubscribe;
   }, []);
 
   return (
-    <div className="sm:w-3/4 mx-auto pt-12 px-8">
-      <h1>Produtos</h1>
+    <div className="mx-auto px-8 pt-12 sm:w-3/4">
+      <Heading text="Produtos" level={3} />
       <CreateProduct />
       <ListOfProducts products={products} />
     </div>

@@ -19,18 +19,17 @@ interface OrderProps {
 }
 
 const Order: FC<OrderProps> = ({ order }: OrderProps) => {
-
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className="cursor-pointer border-1 mb-4 rounded border-gray-100 bg-white p-1 drop-shadow">
+    <div className="mb-4 cursor-pointer rounded border bg-gray-50 p-1">
       <div
         className="flex items-center justify-between"
         onClick={() => setShowDetails((prev) => !prev)}
       >
         <div className="flex flex-wrap items-center gap-1">
           {/* ORDER DATE */}
-          <div className="mr-2 flex flex-wrap items-center border bg-gray-50 p-1">
+          <div className="mr-2 flex flex-wrap items-center border bg-white p-1">
             <FaClock className="mr-2" />
             <span className="mr-2">
               {new Date(order?.date?.toDate()).toLocaleTimeString([], {
@@ -44,13 +43,13 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
           </div>
 
           {/* ITEM QUANTITY */}
-          <div className="mr-2 flex items-center border bg-gray-50 p-1">
+          <div className="mr-2 flex items-center border bg-white p-1">
             <FaShoppingCart className="mr-1" />
             {order.items.length} itens
           </div>
 
           {/* TOTAL */}
-          <div className="mr-2 flex items-center border bg-gray-50 p-1">
+          <div className="mr-2 flex items-center border bg-white p-1">
             <BiMoney className="mr-1" />
             Total:{" "}
             {currencyFormatter.format(
@@ -76,25 +75,44 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
 
       {showDetails && (
         <>
-          <div className="border-1 mt-2 p-3">
-            {order.items.map((item, idx) => {
-              return (
-                <div key={idx}>
-                  <span className="mr-1">#{idx + 1}</span>
-                  {item.productName} | {currencyFormatter.format(item.productPrice)}{" "}
-                  x {item.quantity} ={" "}
-                  {currencyFormatter.format(item.productPrice * item.quantity)}
-                </div>
-              );
-            })}
+          <div className="mt-2 border bg-white p-3">
+            <table className="w-full">
+              <tr className="text-left">
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Preço</th>
+                <th>Subtotal</th>
+              </tr>
 
-            <p className="mt-3 flex items-center bg-white border border-green-500">
+              <tbody>
+                {order.items.map((item, idx) => {
+                  return (
+                    <tr key={idx}>
+                      <td>{item.productName}</td>
+                      <td>{item.quantity}</td>
+                      <td>{currencyFormatter.format(item.productPrice)}</td>
+
+                      <td>
+                        {currencyFormatter.format(
+                          item.productPrice * item.quantity
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+
+            <p className="mt-3 flex items-center bg-white text-lg">
               <BiMoney className="mr-1" />
-              <b>Total:</b> {currencyFormatter.format(calculateOrderTotal(order.items))}
+              Total:
+              <b className="ml-2">
+                {currencyFormatter.format(calculateOrderTotal(order.items))}
+              </b>
             </p>
           </div>
 
-          <div className="border-1 mt-2 border bg-gray-50 p-2 ">
+          <div className="border-1 mt-2 border bg-white p-2 ">
             <p className="flex items-center">
               <GrNotes className="mr-1" />
               Detalhes do Pedido: {order.comment}

@@ -2,6 +2,11 @@ import React, { FC, useRef, useState } from "react";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from "../../firebase";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
+import {
+  Heading,
+  FormGroup,
+  Button,
+} from "@aprendaagora/simple-react-component-library";
 
 const CreateProduct: FC = () => {
   const [showForm, setShowForm] = useState(false);
@@ -29,6 +34,7 @@ const CreateProduct: FC = () => {
       .catch((error) => alert("Error: " + error))
       .finally(() => {
         setNewProductName("");
+        setNewProductDescription("");
         setNewProductPrice(0);
         priceInput.current!.value = "0";
         setNewProductImage("");
@@ -36,12 +42,12 @@ const CreateProduct: FC = () => {
   };
 
   return (
-    <div className="mx-1 my-2 border-2 bg-slate-200 p-3">
+    <div className="mx-1 my-2 border bg-white p-3">
       <div
         onClick={() => setShowForm((prev) => !prev)}
         className="flex cursor-pointer items-center justify-between"
       >
-        <h1 className="mb-0">Criar Produto</h1>
+        <Heading text="Criar Produto" level={5} />
         <div className="h-fit rounded bg-slate-300 p-1">
           {showForm ? <FaChevronUp /> : <FaChevronDown />}
         </div>
@@ -49,31 +55,23 @@ const CreateProduct: FC = () => {
 
       {showForm && (
         <form onSubmit={handleCreateNewProduct} className="mt-3 bg-white p-2">
-          <div className="mb-1 flex flex-col border bg-gray-50 p-1">
-            <label htmlFor="newProductName">Nome do Produto</label>
-            <input
-              value={newProductName}
-              onChange={(e) => setNewProductName(e.target.value)}
-              type="text"
-              name="newProductName"
-              id="newProductName"
-              className="rounded p-1"
-            />
-          </div>
+          <FormGroup
+            value={newProductName}
+            onChange={setNewProductName}
+            label="Nome do Produto"
+            name="newProductName"
+            className="mb-3"
+          />
 
-          <div className="mb-1 flex flex-col border bg-gray-50 p-1">
-            <label htmlFor="newProductName">Descrição do Produto</label>
-            <input
-              value={newProductDescription}
-              onChange={(e) => setNewProductDescription(e.target.value)}
-              type="text"
-              name="newProductDescription"
-              id="newProductDescription"
-              className="rounded p-1"
-            />
-          </div>
+          <FormGroup
+            value={newProductDescription}
+            onChange={setNewProductDescription}
+            label="Descrição do Produto"
+            name="newProductDescription"
+            className="mb-3"
+          />
 
-          <div className="mb-2 flex flex-col border bg-gray-50 p-1">
+          <div className="mb-2 flex flex-col">
             <label htmlFor="newProductPrice">Preço do Produto</label>
             <input
               onChange={(e) => setNewProductPrice(Number(e.target.value))}
@@ -82,24 +80,19 @@ const CreateProduct: FC = () => {
               step="0.01"
               name="newProductPrice"
               id="newProductPrice"
+              className="rounded border p-1"
             />
           </div>
 
-          <div className="mb-1 flex flex-col border bg-gray-50 p-1">
-            <label htmlFor="newProductName">Imagem do Produto</label>
-            <input
-              value={newProductImage}
-              onChange={(e) => setNewProductImage(e.target.value)}
-              type="text"
-              name="newProductImage"
-              id="newProductImage"
-              className="rounded p-1"
-            />
-          </div>
+          <FormGroup
+            value={newProductImage}
+            onChange={setNewProductImage}
+            label="Imagem do Produto"
+            name="newProductImage"
+            className="mb-3"
+          />
 
-          <button className="rounded border border-blue-800 bg-blue-400 p-2 font-bold text-white">
-            Criar Produto
-          </button>
+          <Button className="rounded p-1" type="primary" text="Criar produto" />
         </form>
       )}
     </div>

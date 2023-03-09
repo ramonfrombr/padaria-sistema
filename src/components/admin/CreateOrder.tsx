@@ -7,6 +7,7 @@ import { db } from "../../firebase";
 import axios from "axios";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { Button, Heading } from "@aprendaagora/simple-react-component-library";
 
 interface CreateOrderProps {
   products: IProduct[];
@@ -145,19 +146,19 @@ const CreateOrder: FC<CreateOrderProps> = ({ products }: CreateOrderProps) => {
   };
 
   return (
-    <div className="mx-1 my-2 border-2 bg-gray-100 p-3">
+    <div className="mx-1 my-2 border bg-white">
       <div
         onClick={() => setShowForm((prev) => !prev)}
-        className="flex cursor-pointer items-center justify-between"
+        className="flex cursor-pointer items-center justify-between p-3"
       >
-        <h1 className="mb-0">Criar Pedido</h1>
+        <Heading text="Criar Pedido" level={6} />
         <div className="h-fit rounded bg-slate-300 p-1">
           {showForm ? <FaChevronUp /> : <FaChevronDown />}
         </div>
       </div>
 
       {showForm && (
-        <>
+        <div className="p-3">
           <form
             onSubmit={handleAddProductToOrder}
             className="mt-3 flex justify-between bg-white p-3"
@@ -190,15 +191,13 @@ const CreateOrder: FC<CreateOrderProps> = ({ products }: CreateOrderProps) => {
               />
             </div>
 
-            <button
-              type="submit"
+            <Button
               disabled={selectedProductId === "0" ? true : false}
-              className={`flex w-10 items-center justify-center rounded  p-1 font-bold text-white ${
+              text={<FaPlus />}
+              className={`h-fit items-center p-2  ${
                 selectedProductId === "0" ? "bg-gray-500" : "bg-green-600"
               }`}
-            >
-              <FaPlus />
-            </button>
+            />
           </form>
 
           <div className="mt-5 mb-3 border-2 bg-slate-50 p-2">
@@ -328,7 +327,7 @@ const CreateOrder: FC<CreateOrderProps> = ({ products }: CreateOrderProps) => {
           >
             Criar Pedido
           </button>
-        </>
+        </div>
       )}
     </div>
   );
