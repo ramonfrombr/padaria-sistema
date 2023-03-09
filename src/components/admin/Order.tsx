@@ -22,7 +22,7 @@ const Order: FC<OrderProps> = ({ order }: OrderProps) => {
   const [showDetails, setShowDetails] = useState(false);
 
   return (
-    <div className="mb-4 cursor-pointer rounded border bg-gray-50 p-1">
+    <div className="mb-4 cursor-pointer rounded border bg-gray-200 p-1">
       <div
         className="flex items-center justify-between"
         onClick={() => setShowDetails((prev) => !prev)}

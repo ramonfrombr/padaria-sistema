@@ -161,12 +161,12 @@ const CreateOrder: FC<CreateOrderProps> = ({ products }: CreateOrderProps) => {
         <div className="p-3">
           <form
             onSubmit={handleAddProductToOrder}
-            className="mt-3 flex justify-between bg-white p-3"
+            className="mt-3 flex justify-between bg-white"
           >
             <div className="flex w-full justify-between">
               <select
                 onChange={(e) => setSelectedProductId(e.target.value)}
-                className="mr-1 flex-1 rounded"
+                className="mr-1 flex-1 rounded bg-slate-200"
               >
                 <option key={"0"} value={"0"}>
                   Escolha um produto

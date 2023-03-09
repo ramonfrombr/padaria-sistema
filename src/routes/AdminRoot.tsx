@@ -12,9 +12,9 @@ const AdminRoot = () => {
   const location = useLocation();
 
   return (
-    <div className="min-h-screen bg-orange-50/20 pb-10">
+    <div className="min-h-screen bg-slate-200 pb-10">
       {/* Tabs */}
-      <div className="flex flex-wrap items-center gap-2 border-b-2 border-orange-300 bg-orange-600 p-2 ">
+      <div className="flex flex-wrap items-center gap-2 border-b-2 border-orange-200 bg-orange-600 p-2 ">
         <Link to="/admin">
           <div className="mr-3 h-12 w-12 rounded-full bg-white p-1">
             <img src={logo} alt="logo" />
