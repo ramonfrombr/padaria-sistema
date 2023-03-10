@@ -27,7 +27,7 @@ const SigninScreen = () => {
     }
   };
   return (
-    <div className="mx-auto mt-5 w-[600px] border bg-slate-200 p-5">
+    <div className="mx-auto mt-5 w-[600px] border bg-white p-5">
       <Heading text="Login" className="mb-10" />
       {error && (
         <Alert closeButton={true} className="mb-5" type="danger" text={error} />
@@ -49,7 +49,11 @@ const SigninScreen = () => {
         className="mb-2"
       />
 
-      <Button text="Login" className="mt-5 p-2" onClick={handleLogin} />
+      <Button
+        text="Login"
+        className="mt-5 bg-gray-500 p-2 transition duration-150 hover:bg-orange-500"
+        onClick={handleLogin}
+      />
     </div>
   );
 };

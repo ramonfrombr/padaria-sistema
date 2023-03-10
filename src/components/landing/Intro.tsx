@@ -2,15 +2,8 @@ import React, { useState } from "react";
 import backgroundImage from "../../assets/images/padaria-1.jpg";
 import IntroContent from "./IntroContent";
 import Navbar from "./Navbar";
-import Sidemenu from "./Sidemenu";
 
 const Intro = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setMenuOpen((prev) => !prev);
-  };
-
   return (
     <div
       style={{
@@ -18,13 +11,8 @@ const Intro = () => {
       }}
       className="h-screen bg-cover bg-center"
     >
-      {/* Navbar */}
-      <Navbar toggleMenu={toggleMenu} />
+      <Navbar />
 
-      {/* Sidemenu */}
-      <Sidemenu menuOpen={menuOpen} toggleMenu={toggleMenu} />
-
-      {/* Intro Content */}
       <IntroContent />
     </div>
   );

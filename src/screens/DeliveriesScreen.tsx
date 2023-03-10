@@ -45,7 +45,7 @@ const DeliveriesScreen = () => {
           <Delivery key={delivery.id} delivery={delivery.data} />
         ))
       ) : (
-        <p className="col-span-3">Não há entregas registradas.</p>
+        <p className="col-span-3 bg-white p-5">Não há entregas registradas.</p>
       )}
     </div>
   );

@@ -3,11 +3,7 @@ import { Link } from "react-router-dom";
 import logo from "../../assets/images/products/logo.png";
 import { FaBars } from "react-icons/fa";
 
-interface NavbarProps {
-  toggleMenu: () => void;
-}
-
-const Navbar = ({ toggleMenu }: NavbarProps) => {
+const Navbar = () => {
   return (
     <div className="flex items-center justify-between bg-black/50 py-3 pl-8 pr-3 font-bold">
       {/* Nav Logo */}
