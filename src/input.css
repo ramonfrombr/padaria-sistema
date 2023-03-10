@@ -2,12 +2,3 @@
 @tailwind components;
 @tailwind utilities;
 
-h1 {
-  font-size: 28px;
-  margin-bottom: 20px;
-}
-
-h2 {
-  font-size: 20px;
-  margin-bottom: 20px;
-}

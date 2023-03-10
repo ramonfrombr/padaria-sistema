@@ -23,12 +23,15 @@ const IntroContent = () => {
         <p style={{ fontSize: "clamp(2rem, 2.5vw, 3rem)" }} className="mb-8">
           Fresquinho todos os dias!
         </p>
-        <button className="flex cursor-pointer flex-col items-center border-0 bg-[#e31837] py-4 px-16 text-xl text-white">
-          Faça seu pedido no WhatsApp
-          <div className="flex items-center">
-            (27) 997660261 <FaWhatsappSquare className="ml-2" />
-          </div>
-        </button>
+
+        <a href="https://wa.me/5527981491002?text=">
+          <button className="flex cursor-pointer flex-col items-center border-0 bg-[#e31837] py-4 px-16 text-xl text-white">
+            Faça seu pedido no WhatsApp
+            <div className="flex items-center">
+              (27) 997660261 <FaWhatsappSquare className="ml-2" />
+            </div>
+          </button>
+        </a>
       </div>
     </div>
   );
